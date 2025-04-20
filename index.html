@@ -6,128 +6,139 @@
     <title>Prompt Engineering Habit Tracker</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <div class="container">
-        <h1>Prompt Engineering Study Hub & Habit Tracker</h1>
+<body>    
+    <header><h1>Prompt Engineering Study Guide</h1></header>
 
-        <div class="module progress-module">
-            <h2>Overall Study Progress</h2>
-            <div id="progress-bar-container">
-                <div id="progress-bar-fill"></div>
-            </div>
-            <div id="progress-percentage">Progress: 0%</div>
-        </div>
-
-        <div class="module task-module" data-task-id="timer-session">
-            <h2>Task: Focused Study Session</h2>
-             <div class="task-content">
-                <p>Use the timer to focus your study efforts.</p>
-                <div id="timer-display">00:00:00</div>
-                <div class="timer-controls">
-                    <button id="start-timer">Start</button>
-                    <button id="pause-timer">Pause</button>
-                    <button id="reset-timer">Reset</button>
+    <main>
+        <div class="container">
+            <section><div class="module progress-module">
+                    <h2>Overall Study Progress</h2>
+                    <div id="progress-bar-container">
+                        <div id="progress-bar-fill"></div>
+                    </div>
+                    <div id="progress-percentage">Progress: 0%</div>
                 </div>
-             </div>
-             <div class="task-tracking">
-                <label><input type="checkbox" class="task-started" data-task-type="started"> Started</label>
-                <label><input type="checkbox" class="task-completed" data-task-type="completed"> Completed</label>
-             </div>
-        </div>
+            </section>
+
+            <h1>Prompt Engineering Study Hub & Habit Tracker</h1>
+
+            <section><div class="module task-module" data-task-id="timer-session">
+                    <h2>Task: Focused Study Session</h2>
+                    <div class="task-content">
+                        <p>Use the timer to focus your study efforts.</p>
+                        <div id="timer-display">00:00:00</div>
+                        <div class="timer-controls">
+                            <button id="start-timer">Start</button>
+                            <button id="pause-timer">Pause</button>
+                            <button id="reset-timer">Reset</button>
+                        </div>
+                    </div>
+                    <div class="task-tracking">
+                        <label><input type="checkbox" class="task-started" data-task-type="started"> Started</label>
+                        <label><input type="checkbox" class="task-completed" data-task-type="completed"> Completed</label>
+                    </div>
+                </div>
+            </section>
 
 
-        <div class="module task-module" data-task-id="notes">
-            <h2>Task: Review & Update Notes</h2>
-             <div class="task-content">
-                 <p>Review previous notes or add new insights. Saved automatically.</p>
-                <textarea id="notes-area" placeholder="Enter your study notes here..."></textarea>
-             </div>
-             <div class="task-tracking">
-                <label><input type="checkbox" class="task-started" data-task-type="started"> Started</label>
-                <label><input type="checkbox" class="task-completed" data-task-type="completed"> Completed</label>
-            </div>
-            <div class="section-progress">
-                Section Progress: <span id="notes-percentage">0%</span>
-            </div>
-        </div>
+            <section><div class="module task-module" data-task-id="notes">
+                    <h2>Task: Review & Update Notes</h2>
+                    <div class="task-content">
+                        <p>Review previous notes or add new insights. Saved automatically.</p>
+                        <textarea id="notes-area" placeholder="Enter your study notes here..."></textarea>
+                    </div>
+                    <div class="task-tracking">
+                        <label><input type="checkbox" class="task-started" data-task-type="started"> Started</label>
+                        <label><input type="checkbox" class="task-completed" data-task-type="completed"> Completed</label>
+                    </div>
+                    <div class="section-progress">
+                        Section Progress: <span id="notes-percentage">0%</span>
+                    </div>
+                </div>
+            </section>
 
 
-        <div class="module task-module" data-task-id="articles">
-            <h2>Task: Read Articles & Guides</h2>
-            <div class="task-content">
-                <p>Explore these resources to deepen your understanding.</p>
-                <ul>
-                    <li><a href="https://www.promptingguide.ai/" target="_blank">Prompting Guide (Comprehensive Resource)</a></li>
-                    <li><a href="https://learnprompting.org/" target="_blank">Learn Prompting (Courses & Community)</a></li>
-                    <li><a href="https://platform.openai.com/docs/guides/prompt-engineering" target="_blank">OpenAI: Prompt Engineering Guide</a></li>
-                    <li><a href="https://cobusgreyling.medium.com/the-art-of-prompt-engineering-a-practical-guide-e8f932713526" target="_blank">The Art of Prompt Engineering: A Practical Guide (Medium)</a></li>
-                    <li><a href="https://github.com/dair-ai/Prompt-Engineering-Guide" target="_blank">DAIR.AI Prompt Engineering Guide (GitHub)</a></li>
-                    <li><a href="https://docs.cohere.com/docs/prompt-engineering" target="_blank">Cohere: Prompt Engineering Documentation</a></li>
-                     <li><a href="https://developers.google.com/machine-learning/resources/prompt-eng" target="_blank">Google: Introduction to Prompt Engineering</a></li>
-                </ul>
-            </div>
-            <div class="task-tracking">
-                <label><input type="checkbox" class="task-started" data-task-type="started"> Started</label>
-                <label><input type="checkbox" class="task-completed" data-task-type="completed"> Completed</label>
-            </div>
-            <div class="section-progress">
-                Section Progress: <span id="articles-percentage">0%</span>
-            </div>
-            <ul class="task-list">
-                <li><label><input type="checkbox" data-task-type="article"> <a href="https://www.promptingguide.ai/" target="_blank">Prompting Guide</a></label></li>
-                <li><label><input type="checkbox" data-task-type="article"> <a href="https://learnprompting.org/" target="_blank">Learn Prompting</a></label></li>
-                <li><label><input type="checkbox" data-task-type="article"> <a href="https://platform.openai.com/docs/guides/prompt-engineering" target="_blank">OpenAI Guide</a></label></li>
-                <li><label><input type="checkbox" data-task-type="article"> <a href="https://cobusgreyling.medium.com/the-art-of-prompt-engineering-a-practical-guide-e8f932713526" target="_blank">Art of Prompt Engineering</a></label></li>
-                <li><label><input type="checkbox" data-task-type="article"> <a href="https://github.com/dair-ai/Prompt-Engineering-Guide" target="_blank">DAIR.AI Guide</a></label></li>
-                <li><label><input type="checkbox" data-task-type="article"> <a href="https://docs.cohere.com/docs/prompt-engineering" target="_blank">Cohere Docs</a></label></li>
-                <li><label><input type="checkbox" data-task-type="article"> <a href="https://developers.google.com/machine-learning/resources/prompt-eng" target="_blank">Google Intro</a></label></li>
-            </ul>
-        </div>
+            <section><div class="module task-module" data-task-id="articles">
+                    <h2>Task: Read Articles & Guides</h2>
+                    <div class="task-content">
+                        <p>Explore these resources to deepen your understanding.</p>
+                        <ul>
+                            <li><a href="https://www.promptingguide.ai/" target="_blank" aria-label="Prompting Guide (Comprehensive Resource) (Opens in a new Tab)">Prompting Guide (Comprehensive Resource)</a></li>
+                            <li><a href="https://learnprompting.org/" target="_blank" aria-label="Learn Prompting (Courses & Community) (Opens in a new Tab)">Learn Prompting (Courses & Community)</a></li>
+                            <li><a href="https://platform.openai.com/docs/guides/prompt-engineering" target="_blank" aria-label="OpenAI: Prompt Engineering Guide (Opens in a new Tab)">OpenAI: Prompt Engineering Guide</a></li>
+                            <li><a href="https://cobusgreyling.medium.com/the-art-of-prompt-engineering-a-practical-guide-e8f932713526" target="_blank" aria-label="The Art of Prompt Engineering: A Practical Guide (Medium) (Opens in a new Tab)">The Art of Prompt Engineering: A Practical Guide (Medium)</a></li>
+                            <li><a href="https://github.com/dair-ai/Prompt-Engineering-Guide" target="_blank" aria-label="DAIR.AI Prompt Engineering Guide (GitHub) (Opens in a new Tab)">DAIR.AI Prompt Engineering Guide (GitHub)</a></li>
+                            <li><a href="https://docs.cohere.com/docs/prompt-engineering" target="_blank" aria-label="Cohere: Prompt Engineering Documentation (Opens in a new Tab)">Cohere: Prompt Engineering Documentation</a></li>
+                            <li><a href="https://developers.google.com/machine-learning/resources/prompt-eng" target="_blank" aria-label="Google: Introduction to Prompt Engineering (Opens in a new Tab)">Google: Introduction to Prompt Engineering</a></li>
+                        </ul>
+                    </div>
+                    <div class="task-tracking">
+                        <label><input type="checkbox" class="task-started" data-task-type="started"> Started</label>
+                        <label><input type="checkbox" class="task-completed" data-task-type="completed"> Completed</label>
+                    </div>
+                    <div class="section-progress">
+                        Section Progress: <span id="articles-percentage">0%</span>
+                    </div>
+                    <ul class="task-list">
+                        <li><label><input type="checkbox" data-task-type="article"> <a href="https://www.promptingguide.ai/" target="_blank" aria-label="Prompting Guide (Opens in a new Tab)">Prompting Guide</a></label></li>
+                        <li><label><input type="checkbox" data-task-type="article"> <a href="https://learnprompting.org/" target="_blank" aria-label="Learn Prompting (Opens in a new Tab)">Learn Prompting</a></label></li>
+                        <li><label><input type="checkbox" data-task-type="article"> <a href="https://platform.openai.com/docs/guides/prompt-engineering" target="_blank" aria-label="OpenAI Guide (Opens in a new Tab)">OpenAI Guide</a></label></li>
+                        <li><label><input type="checkbox" data-task-type="article"> <a href="https://cobusgreyling.medium.com/the-art-of-prompt-engineering-a-practical-guide-e8f932713526" target="_blank" aria-label="Art of Prompt Engineering (Opens in a new Tab)">Art of Prompt Engineering</a></label></li>
+                        <li><label><input type="checkbox" data-task-type="article"> <a href="https://github.com/dair-ai/Prompt-Engineering-Guide" target="_blank" aria-label="DAIR.AI Guide (Opens in a new Tab)">DAIR.AI Guide</a></label></li>
+                        <li><label><input type="checkbox" data-task-type="article"> <a href="https://docs.cohere.com/docs/prompt-engineering" target="_blank" aria-label="Cohere Docs (Opens in a new Tab)">Cohere Docs</a></label></li>
+                        <li><label><input type="checkbox" data-task-type="article"> <a href="https://developers.google.com/machine-learning/resources/prompt-eng" target="_blank" aria-label="Google Intro (Opens in a new Tab)">Google Intro</a></label></li>
+                    </ul>
+                </div>
+            </section>
 
-        <div class="module task-module" data-task-id="videos">
-             <h2>Task: Watch Videos</h2>
-             <div class="task-content">
-             <div class="section-progress">
-                Section Progress: <span id="videos-percentage">0%</span>
-            </div>
-                <p>Learn through visual explanations and tutorials.</p>
-                <ul>
-                    <li><a href="https://www.youtube.com/watch?v=dOxUroR57xA" target="_blank">Prompt Engineering Tutorial – Master ChatGPT & LLMs (freeCodeCamp)</a></li>
-                    <li><a href="https://www.youtube.com/watch?v=nokPc-gCMA8" target="_blank">What Is Prompt Engineering? (IBM Technology)</a></li>
-                    <li><a href="https://www.youtube.com/watch?v=46kIuXI-7cs" target="_blank">Prompt Engineering for ChatGPT (DataCamp)</a></li>
-                    <li><a href="https://www.youtube.com/watch?v=HeoVbl4ceK8" target="_blank">OpenAI's Prompt Engineering Guide Explained (YouTube - Various Creators)</a></li>
-                    <li><a href="https://www.youtube.com/watch?v=b9m1zTLRd9c" target="_blank">Advanced Prompt Engineering Techniques (YouTube - Various Creators)</a></li>
-                </ul>
-            </div>
-            <div class="task-tracking">
-                <label><input type="checkbox" class="task-started" data-task-type="started"> Started</label>
-                <label><input type="checkbox" class="task-completed" data-task-type="completed"> Completed</label>
-            </div>
-             <ul class="task-list">
-                <li><label><input type="checkbox" data-task-type="video"> <a href="https://www.youtube.com/watch?v=dOxUroR57xA" target="_blank">Prompt Engineering Tutorial</a></label></li>
-                <li><label><input type="checkbox" data-task-type="video"> <a href="https://www.youtube.com/watch?v=nokPc-gCMA8" target="_blank">What Is Prompt Engineering?</a></label></li>
-                <li><label><input type="checkbox" data-task-type="video"> <a href="https://www.youtube.com/watch?v=46kIuXI-7cs" target="_blank">Prompt Engineering for ChatGPT</a></label></li>
-                <li><label><input type="checkbox" data-task-type="video"> <a href="https://www.youtube.com/watch?v=HeoVbl4ceK8" target="_blank">OpenAI's Guide Explained</a></label></li>
-                <li><label><input type="checkbox" data-task-type="video"> <a href="https://www.youtube.com/watch?v=b9m1zTLRd9c" target="_blank">Advanced Techniques</a></label></li>
-            </ul>
-        </div>
+            <section><div class="module task-module" data-task-id="videos">
+                    <h2>Task: Watch Videos</h2>
+                    <div class="task-content">
+                        <div class="section-progress">
+                            Section Progress: <span id="videos-percentage">0%</span>
+                        </div>
+                        <p>Learn through visual explanations and tutorials.</p>
+                        <ul>
+                            <li><a href="https://www.youtube.com/watch?v=dOxUroR57xA" target="_blank" aria-label="Prompt Engineering Tutorial – Master ChatGPT & LLMs (freeCodeCamp) (Opens in a new Tab)">Prompt Engineering Tutorial – Master ChatGPT & LLMs (freeCodeCamp)</a></li>
+                            <li><a href="https://www.youtube.com/watch?v=nokPc-gCMA8" target="_blank" aria-label="What Is Prompt Engineering? (IBM Technology) (Opens in a new Tab)">What Is Prompt Engineering? (IBM Technology)</a></li>
+                            <li><a href="https://www.youtube.com/watch?v=46kIuXI-7cs" target="_blank" aria-label="Prompt Engineering for ChatGPT (DataCamp) (Opens in a new Tab)">Prompt Engineering for ChatGPT (DataCamp)</a></li>
+                            <li><a href="https://www.youtube.com/watch?v=HeoVbl4ceK8" target="_blank" aria-label="OpenAI's Prompt Engineering Guide Explained (YouTube - Various Creators) (Opens in a new Tab)">OpenAI's Prompt Engineering Guide Explained (YouTube - Various Creators)</a></li>
+                            <li><a href="https://www.youtube.com/watch?v=b9m1zTLRd9c" target="_blank" aria-label="Advanced Prompt Engineering Techniques (YouTube - Various Creators) (Opens in a new Tab)">Advanced Prompt Engineering Techniques (YouTube - Various Creators)</a></li>
+                        </ul>
+                    </div>
+                    <div class="task-tracking">
+                        <label><input type="checkbox" class="task-started" data-task-type="started"> Started</label>
+                        <label><input type="checkbox" class="task-completed" data-task-type="completed"> Completed</label>
+                    </div>
+                    <ul class="task-list">
+                        <li><label><input type="checkbox" data-task-type="video"> <a href="https://www.youtube.com/watch?v=dOxUroR57xA" target="_blank" aria-label="Prompt Engineering Tutorial (Opens in a new Tab)">Prompt Engineering Tutorial</a></label></li>
+                        <li><label><input type="checkbox" data-task-type="video"> <a href="https://www.youtube.com/watch?v=nokPc-gCMA8" target="_blank" aria-label="What Is Prompt Engineering? (Opens in a new Tab)">What Is Prompt Engineering?</a></label></li>
+                        <li><label><input type="checkbox" data-task-type="video"> <a href="https://www.youtube.com/watch?v=46kIuXI-7cs" target="_blank" aria-label="Prompt Engineering for ChatGPT (Opens in a new Tab)">Prompt Engineering for ChatGPT</a></label></li>
+                        <li><label><input type="checkbox" data-task-type="video"> <a href="https://www.youtube.com/watch?v=HeoVbl4ceK8" target="_blank" aria-label="OpenAI's Guide Explained (Opens in a new Tab)">OpenAI's Guide Explained</a></label></li>
+                        <li><label><input type="checkbox" data-task-type="video"> <a href="https://www.youtube.com/watch?v=b9m1zTLRd9c" target="_blank" aria-label="Advanced Techniques (Opens in a new Tab)">Advanced Techniques</a></label></li>
+                    </ul>
+                </div>
+            </section>
 
-        <div class="module task-module" data-task-id="more-links">
-            <h2>More Links</h2>
-            <div class="task-content">
-                <p>Additional resources to explore.</p>
-                <ul>
-                    <li><a href="https://arxiv.org/abs/2302.11382" target="_blank">Chain-of-Thought Prompting Paper</a></li>
-                    <li><a href="https://lilianweng.github.io/posts/2023-03-15-prompt-engineering/" target="_blank">Prompt Engineering Best Practices (Blog)</a></li>
-                    <li><a href="https://www.promptingprinciples.com/" target="_blank">Prompting Principles</a></li>
-                </ul>
-            </div>
-            <div class="section-progress">
-                Section Progress: <span id="more-links-percentage">0%</span>
-            </div>
-        </div>
+            <section><div class="module task-module" data-task-id="more-links">
+                    <h2>More Links</h2>
+                    <div class="task-content">
+                        <p>Additional resources to explore.</p>
+                        <ul>
+                            <li><a href="https://arxiv.org/abs/2302.11382" target="_blank" aria-label="Chain-of-Thought Prompting Paper (Opens in a new Tab)">Chain-of-Thought Prompting Paper</a></li>
+                            <li><a href="https://lilianweng.github.io/posts/2023-03-15-prompt-engineering/" target="_blank" aria-label="Prompt Engineering Best Practices (Blog) (Opens in a new Tab)">Prompt Engineering Best Practices (Blog)</a></li>
+                            <li><a href="https://www.promptingprinciples.com/" target="_blank" aria-label="Prompting Principles (Opens in a new Tab)">Prompting Principles</a></li>
+                        </ul>
+                    </div>
+                    <div class="section-progress">
+                        Section Progress: <span id="more-links-percentage">0%</span>
+                    </div>
+                </div>
+            </section>
 
-    </div> <script src="script.js"></script>
+        </div> 
+    </main>
+    <script src="script.js"></script>
 </body>
 </html>
 

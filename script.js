@@ -232,5 +232,12 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeHabitTracker();
     updateOverallProgress();
 
+    // --- Link Click Tracking ---
+    document.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', (event) => {
+            console.log(`Link to ${event.target.href} was clicked`);
+        });
+    });
+
     console.log("Study habit tracker initialized.");
 });
