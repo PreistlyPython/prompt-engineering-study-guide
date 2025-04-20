@@ -89,8 +89,25 @@ li {
 
 /* --- NEW Progress Bar Styles --- */
 .progress-module {
+    /* Sticky positioning */
+    position: sticky;
+    top: 20px; /* Adjust as needed */
+    z-index: 100; /* Ensure it stays on top */
     background-color: #e9f5ff; /* Light blue background */
     border-color: #bde0fe;
+    /* Collapsible section styles */
+    padding: 15px; /* Add some padding */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.progress-module summary {
+    font-weight: bold;
+    cursor: pointer;
+    padding: 10px;
+    background-color: #d0e8ff; /* Slightly darker blue */
+    border-radius: 5px;
+    margin-bottom: 10px;
 }
 
 #progress-bar-container {

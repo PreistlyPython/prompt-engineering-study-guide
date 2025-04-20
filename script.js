@@ -160,6 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
                          currentState[taskId].started = true; // Auto-set started
                          startedCheckbox.checked = true; // Update UI too
                     }
+
                     // Optional: Uncheck 'completed' if 'started' is unchecked
                     if (type === 'started' && !event.target.checked && completedCheckbox) {
                          currentState[taskId].completed = false; // Auto-unset completed
@@ -178,48 +179,69 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateSectionProgress(module) {
-        const startedCheckboxes = module.querySelectorAll('.task-started');
-        const completedCheckboxes = module.querySelectorAll('.task-completed');
-        const sectionProgress = module.querySelector('.section-progress');
-        const totalTasks = startedCheckboxes.length;
-        let completedTasks = 0;
-        let startedTasks = 0;
+        const taskItems = module.querySelectorAll('.task-list li'); // Get all task list items
+        let completedTasks = 0; 
+        let startedTasks = 0; 
 
-        startedCheckboxes.forEach(checkbox => {
-            if (checkbox.checked) {
+        taskItems.forEach(item => {
+            const startedCheckbox = item.querySelector('.task-started');
+            const completedCheckbox = item.querySelector('.task-completed');
+
+            if (startedCheckbox && startedCheckbox.checked) {
                 startedTasks++;
             }
-        });
 
-        completedCheckboxes.forEach(checkbox => {
-            if (checkbox.checked) {
+            if (completedCheckbox && completedCheckbox.checked) {
                 completedTasks++;
             }
+            
         });
 
-        let progressPercentage = 0;
-        if (totalTasks > 0) {
-            progressPercentage = Math.round((completedTasks / totalTasks) * 100);
-        }
+         // Get section progress display if exists
+         const sectionProgressDisplay = module.querySelector('.section-progress span');
+         const totalTasks = taskItems.length;
 
-        if (sectionProgress) {
-            sectionProgress.textContent = ` ${progressPercentage}% Complete`;
-        }
+          // Update progress percentage if display element exists
+         if (sectionProgressDisplay) {
+             const progressPercentage = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+             sectionProgressDisplay.textContent = `${progressPercentage}%`;
+         }
     }
 
-    function calculateOverallProgress() {
-        const sectionProgressBars = document.querySelectorAll('.section-progress');
-        let totalProgress = 0;
+     function updateOverallProgress() {
+         let totalTasks = 0;
+         let totalCompleted = 0;
 
-        sectionProgressBars.forEach(bar => {
-            const progressText = bar.textContent;
-            const percentage = parseInt(progressText.match(/\d+/)[0]);
-            totalProgress += percentage;
-        });
+         TASK_MODULES.forEach(module => {
+             const taskItems = module.querySelectorAll('.task-list li');
+             totalTasks += taskItems.length;
 
-        const overallPercentage = Math.round(totalProgress / sectionProgressBars.length);
-        return overallPercentage;
-    }
+             taskItems.forEach(item => {
+                 const completedCheckbox = item.querySelector('.task-completed');
+                 if (completedCheckbox && completedCheckbox.checked) {
+                     totalCompleted++;
+                 }
+             });
+         });
+
+         const overallPercentage = totalTasks > 0 ? Math.round((totalCompleted / totalTasks) * 100) : 0;
+         const overallProgressDisplay = document.getElementById('progress-percentage');
+
+         if (overallProgressDisplay) {
+             overallProgressDisplay.textContent = `Overall Study Progress: ${overallPercentage}%`;
+         }
+     }
+
+    // Function to handle checkbox changes
+     function handleCheckboxChange(event) {
+         const checkbox = event.target;
+         const type = checkbox.dataset.taskType;
+         // If one checkbox is checked, check the other one too
+         if (type === 'started' || type === 'completed') {
+             checkbox.checked = true;
+         }
+         updateOverallProgress();
+     }
 
     function updateOverallProgress() {
         const overallPercentage = calculateOverallProgress();
@@ -227,7 +249,6 @@ document.addEventListener('DOMContentLoaded', () => {
             overallProgress.textContent = `Overall Progress: ${overallPercentage}%`;
         }
     }
-
     // Initialize everything
     initializeHabitTracker();
     updateOverallProgress();
@@ -240,4 +261,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     console.log("Study habit tracker initialized.");
+
+    // New: Attach event listeners to all checkboxes for progress tracking
+     const allCheckboxes = document.querySelectorAll('input[type="checkbox"]');
+     allCheckboxes.forEach(checkbox => {
+         checkbox.addEventListener('change', (event) => {
+             const checkbox = event.target;
+             const isTaskCheckbox = checkbox.classList.contains('task-started') || checkbox.classList.contains('task-completed');
+             const hasTaskType = checkbox.hasAttribute('data-task-type');
+
+             if (isTaskCheckbox || hasTaskType) {
+                 handleCheckboxChange(event);
+             }
+         });
+     });
+
+    // Initial progress update
+     updateOverallProgress();
 });
