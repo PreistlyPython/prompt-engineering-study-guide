@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let seconds = 0;
     let isRunning = false;
     let sessionSeconds = 0; // Separate counter for session time
-    const overallProgress = document.getElementById('overall-progress');
 
     function formatTime(totalSeconds) {
         const hours = Math.floor(totalSeconds / 3600);
@@ -298,89 +297,88 @@ document.addEventListener('DOMContentLoaded', () => {
         updateOverallProgressDisplay();
     }
 
-    // --- Collapsible Section ---
-    if (overallProgressSection) {
-        const collapsibleContent = overallProgressSection.querySelector('.collapsible-content');
-        overallProgressSection.addEventListener('click', () => {
-            collapsibleContent.classList.toggle('collapsed');
-        });
-    }
+    function updateSectionProgress(sectionId) {
+        let totalTasks = 0;
+        let completedTasks = 0;
+        let startedTasks = 0;
+        const habitState = getHabitState();
 
-    // Attach event listeners for adding time to sections
-    document.querySelectorAll('.add-time-btn').forEach(button => {
-        button.addEventListener('click', () => {
-            addTimeToSection(button.dataset.section);
-        });
-    });
+        // Select all list items within the section
+        const listItems = document.querySelectorAll(`#${sectionId} .task-list li`);
 
-    // Attach event listeners to checkboxes
-    const allCheckboxes = document.querySelectorAll('input[type="checkbox"]');
-    allCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', handleCheckboxChange);
-    });
-
-    // --- Initialization ---
-    initializeSectionTimes();
-    initializeHabitTracker();
-    updateTotalProgress();
-    updateOverallProgressDisplay();
-    updateSessionTimeDisplay(); // Initial session time display
-}
-    }
-
-    function updateSectionProgress(module) {
-        const taskItems = module.querySelectorAll('.task-list li'); // Get all task list items
-        let completedTasks = 0; 
-        let startedTasks = 0; 
-
-        taskItems.forEach(item => {
-            const startedCheckbox = item.querySelector('.task-started');
-            const completedCheckbox = item.querySelector('.task-completed');
-
-            if (startedCheckbox && startedCheckbox.checked) {
-                startedTasks++;
+        listItems.forEach(item => {
+            const taskId = item.dataset.taskId;
+            if (taskId && habitState[taskId]) {
+                totalTasks++;
+                if (habitState[taskId].completed) {
+                    completedTasks++;
+                }
+                if (habitState[taskId].started) {
+                    startedTasks++;
+                }
             }
-
-            if (completedCheckbox && completedCheckbox.checked) {
-                completedTasks++;
-            }
-            
         });
 
-         // Get section progress display if exists
-         const sectionProgressDisplay = module.querySelector('.section-progress span');
-         const totalTasks = taskItems.length;
+        // Subtasks handling (assuming subtasks are within list items with a specific class)
+        const subtaskItems = document.querySelectorAll(`#${sectionId} .subtask-tracking li`);
+        subtaskItems.forEach(item => {
+            const taskId = item.dataset.taskId;
+            if (taskId && habitState[taskId]) {
+                totalTasks++;
+                if (habitState[taskId].completed) {
+                    completedTasks++;
+                }
+                if (habitState[taskId].started) {
+                    startedTasks++;
+                }
+            }
+        });
 
-          // Update progress percentage if display element exists
-         if (sectionProgressDisplay) {
-             const progressPercentage = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
-             sectionProgressDisplay.textContent = `${progressPercentage}%`;
-         }
+        // Calculate progress based on started or completed tasks
+        let progressPercentage;
+        if (startedTasks > 0) {
+            progressPercentage = Math.round((startedTasks / totalTasks) * 100);
+        } else {
+            progressPercentage = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+        }
+
+        const sectionProgressDisplay = document.querySelector(`#${sectionId} .section-progress span`);
+        if (sectionProgressDisplay) {
+            sectionProgressDisplay.textContent = `${progressPercentage}%`;
+        }
+        return { totalTasks, completedTasks };
     }
 
-     function updateOverallProgress() {
-         let totalTasks = 0;
-         let totalCompleted = 0;
+    function calculateOverallProgress() {
+        let totalTasks = 0;
+        let totalCompleted = 0;
+        let totalStarted = 0;
+        const habitState = getHabitState();
 
-         TASK_MODULES.forEach(module => {
-             const taskItems = module.querySelectorAll('.task-list li');
-             totalTasks += taskItems.length;
+        TASK_MODULES.forEach(module => {
+            const { totalTasks: sectionTotal, completedTasks: sectionCompleted } = updateSectionProgress(module.id);
+            totalTasks += sectionTotal;
+            totalCompleted += sectionCompleted;
 
-             taskItems.forEach(item => {
-                 const completedCheckbox = item.querySelector('.task-completed');
-                 if (completedCheckbox && completedCheckbox.checked) {
-                     totalCompleted++;
-                 }
-             });
-         });
+            // Count started tasks for overall progress (consider subtasks as well)
+            module.querySelectorAll('li').forEach(item => {
+                const taskId = item.dataset.taskId;
+                if (taskId && habitState[taskId] && habitState[taskId].started) {
+                    totalStarted++;
+                }
+            });
+        });
 
-         const overallPercentage = totalTasks > 0 ? Math.round((totalCompleted / totalTasks) * 100) : 0;
-         const overallProgressDisplay = document.getElementById('progress-percentage');
+        // Use started tasks for overall progress if available, otherwise use completed tasks
+        let overallPercentage;
+        if (totalStarted > 0) {
+            overallPercentage = Math.round((totalStarted / totalTasks) * 100);
+        } else {
+            overallPercentage = totalTasks > 0 ? Math.round((totalCompleted / totalTasks) * 100) : 0;
+        }
 
-         if (overallProgressDisplay) {
-             overallProgressDisplay.textContent = `Overall Study Progress: ${overallPercentage}%`;
-         }
-     }
+        return overallPercentage;
+    }
 
     // Function to handle checkbox changes
      function handleCheckboxChange(event) {
@@ -390,23 +388,35 @@ document.addEventListener('DOMContentLoaded', () => {
          if (type === 'started' || type === 'completed') {
              checkbox.checked = true;
          }
-         updateOverallProgress();
-     }
 
-    function updateOverallProgress() {
-        const overallPercentage = calculateOverallProgress();
-        if (overallProgress) {
-            overallProgress.textContent = `Overall Progress: ${overallPercentage}%`;
-        }
-    }
-    // Initialize everything
-    initializeHabitTracker();
-    updateOverallProgress();
+         const state = getHabitState();
+         let taskId;
+         const isSubtask = checkbox.closest('.subtask-tracking');
+         if (isSubtask) {
+             taskId = checkbox.closest('li').dataset.taskId;
+         } else {
+             taskId = checkbox.closest('.task-module').dataset.taskId;
+         }
 
-    // --- Link Click Tracking ---
-    document.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', (event) => {
-            console.log(`Link to ${event.target.href} was clicked`);
+         if (!taskId) return;
+
+         if (!state[taskId]) {
+             state[taskId] = {};
+         }
+
+         state[taskId][type] = checkbox.checked;
+
+         // If 'completed' is checked, also check 'started'
+         if (type === 'completed' && checkbox.checked) {
+             state[taskId].started = true;
+         }
+
+         saveHabitState(state);
+
+         // Update the progress for the specific section and overall
+         const sectionId = checkbox.closest('.task-module').id;
+         updateSectionProgress(sectionId);
+         updateOverallProgressDisplay();
         });
     });
 
@@ -425,7 +435,35 @@ document.addEventListener('DOMContentLoaded', () => {
              }
          });
      });
+     
+     // --- Collapsible Section ---
+     if (overallProgressSection) {
+         const collapsibleContent = overallProgressSection.querySelector('.collapsible-content');
+         overallProgressSection.addEventListener('click', () => {
+             collapsibleContent.classList.toggle('collapsed');
+         });
+     }
 
-    // Initial progress update
-     updateOverallProgress();
+     // Attach event listeners for adding time to sections
+     document.querySelectorAll('.add-time-btn').forEach(button => {
+         button.addEventListener('click', () => {
+             addTimeToSection(button.dataset.section);
+         });
+     });
+
+     // --- Initialization ---
+     initializeSectionTimes();
+     initializeHabitTracker();
+     updateTotalProgress();
+     updateOverallProgressDisplay();
+     updateSessionTimeDisplay(); // Initial session time display
+
+     // Update section and overall progress on load
+     TASK_MODULES.forEach(module => {
+         updateSectionProgress(module.id);
+     });
+     updateOverallProgressDisplay();
+
+     console.log("Study habit tracker initialized.");
+
 });
