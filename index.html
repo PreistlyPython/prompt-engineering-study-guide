@@ -7,20 +7,28 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>    
-    <header><h1>Prompt Engineering Study Guide - Personal Study Hub</h1></header>
+    <header><h1>Prompt Engineering Study Guide - Personal Study Hub</h1></header>    
 
     <main>
         <div class="container">
-            <section class="sticky-section">
-                <details open>
-                    <summary>Overall Study Progress</summary>
-                    <div class="module progress-module">
-                        <div id="progress-bar-container">
-                            <div id="progress-bar-fill"></div>
-                        </div>
-                        <div id="progress-percentage">Progress: 0%</div>
+            <section id="total-progress-section" class="sticky-section">
+                <h2>Total Progress</h2>
+                <div class="module progress-module">
+                    <div id="total-progress-bar-container">
+                        <div id="total-progress-bar-fill"></div>
                     </div>
-                </details>
+                    <div id="total-progress-percentage">Overall Progress: 0%</div>
+                </div>
+            </section>
+
+            <section id="overall-progress-section" class="sticky-section collapsible">
+                <div class="collapsible-content">
+                    <h2>Overall Study Progress</h2>
+                        <div id="overall-progress-bar-container">
+                            <div id="overall-progress-bar-fill"></div>
+                        </div>
+                        <div id="overall-progress-percentage">Overall Progress: 0%</div>
+                </div>
             </section>
 
             <h1>Prompt Engineering Study Hub & Habit Tracker</h1>
@@ -35,11 +43,13 @@
                             <button id="pause-timer">Pause</button>
                             <button id="reset-timer">Reset</button>
                         </div>
+                        <p>Session Time: <span id="session-time">00:00:00</span></p>
                     </div>
                     <div class="task-tracking">
-                        <label><input type="checkbox" class="task-started" data-task-type="started"> Started</label>
-                        <label><input type="checkbox" class="task-completed" data-task-type="completed"> Completed</label>
+                        <label><input type="checkbox" class="task-status" data-task-type="started">Started</label>
+                        <label><input type="checkbox" class="task-status" data-task-type="completed">Completed</label>
                     </div>
+
                 </div>
             </section>
 
@@ -51,25 +61,26 @@
                         <textarea id="notes-area" placeholder="Enter your study notes here..."></textarea>
                     </div>
                     <div class="task-tracking">
-                        <label><input type="checkbox" class="task-started" data-task-type="started"> Started</label>
-                        <label><input type="checkbox" class="task-completed" data-task-type="completed"> Completed</label>
+                        <label><input type="checkbox" class="task-status" data-task-type="started">Started</label>
+                        <label><input type="checkbox" class="task-status" data-task-type="completed">Completed</label>
                     </div>
                     <div class="section-progress">
                         Section Progress: <span id="notes-percentage">0%</span>
                     </div>
+                    <button class="add-time-btn" data-section="notes">Add Session Time to Notes</button>
+                    <p>Total Time for Notes: <span id="notes-total-time">00:00:00</span></p>
                 </div>
             </section>    
 
 
             <section><div class="module task-module" data-task-id="articles">
                     <h2>Task: Read Articles & Guides</h2>
+                    <div class="task-tracking">
+                        <label><input type="checkbox" class="task-status" data-task-type="started">Started</label>
+                        <label><input type="checkbox" class="task-status" data-task-type="completed">Completed</label>
+                    </div>
                     <div class="task-content">
                         <p>Explore these resources to deepen your understanding.</p>
-                    </div>
-                    <ul class="task-list">
-                        <li>
-                            <details>
-                                <summary>Comprehensive Resources</summary>
                         
                         <ul>
                             <li><a href="https://www.promptingguide.ai/" target="_blank" aria-label="Prompting Guide (Comprehensive Resource) (Opens in a new Tab)">Prompting Guide (Comprehensive Resource)</a></li>
@@ -81,26 +92,32 @@
                             <li><a href="https://developers.google.com/machine-learning/resources/prompt-eng" target="_blank" aria-label="Google: Introduction to Prompt Engineering (Opens in a new Tab)">Google: Introduction to Prompt Engineering</a></li>
                         </ul>
                     </div>
-                        </details>
-                        <label><input type="checkbox" class="task-started" data-task-type="started"> Started</label>
-                        <label><input type="checkbox" class="task-completed" data-task-type="completed"> Completed</label>
-                        </li>
-                        <label><input type="checkbox" class="task-started" data-task-type="started"> Started</label>
-                        <label><input type="checkbox" class="task-completed" data-task-type="completed"> Completed</label>
-                    </div>
                     <div class="section-progress">
                         Section Progress: <span id="articles-percentage">0%</span>
                     </div>
-                    <ul class="task-list">
-                        <li>
-                            <details>
-                                <summary>Comprehensive Resources</summary>
-                                <ul>
-                                    <li><label><input type="checkbox" class="task-started" data-task-type="started"> Started</label></li>
-                                    <li><label><input type="checkbox" class="task-completed" data-task-type="completed"> Completed</label></li>
-                                    <li><label><input type="checkbox" data-task-type="article"> <a href="https://www.promptingguide.ai/" target="_blank" aria-label="Prompting Guide (Opens in a new Tab)">Prompting Guide</a></label></li>
-                        <li><label><input type="checkbox" data-task-type="article"> <a href="https://learnprompting.org/" target="_blank" aria-label="Learn Prompting (Opens in a new Tab)">Learn Prompting</a></label></li>
-                        <li><label><input type="checkbox" data-task-type="article"> <a href="https://platform.openai.com/docs/guides/prompt-engineering" target="_blank" aria-label="OpenAI Guide (Opens in a new Tab)">OpenAI Guide</a></label></li>
+                    <button class="add-time-btn" data-section="articles">Add Session Time to Articles</button>
+                    <p>Total Time for Articles: <span id="articles-total-time">00:00:00</span></p>
+                    
+
+                    <ul>
+                        <li><label><input type="checkbox" data-task-type="article"> <a href="https://www.promptingguide.ai/" target="_blank" aria-label="Prompting Guide (Opens in a new Tab)">Prompting Guide</a>
+                            <div class="task-tracking subtask-tracking">
+                                <label><input type="checkbox" class="task-status" data-task-type="started">Started</label>
+                                <label><input type="checkbox" class="task-status" data-task-type="completed">Completed</label>
+                            </div>
+                        </li>
+                        <li><label><input type="checkbox" data-task-type="article"> <a href="https://learnprompting.org/" target="_blank" aria-label="Learn Prompting (Opens in a new Tab)">Learn Prompting</a>
+                            <div class="task-tracking subtask-tracking">
+                                <label><input type="checkbox" class="task-status" data-task-type="started">Started</label>
+                                <label><input type="checkbox" class="task-status" data-task-type="completed">Completed</label>
+                            </div>
+                        </li>
+                        <li><label><input type="checkbox" data-task-type="article"> <a href="https://platform.openai.com/docs/guides/prompt-engineering" target="_blank" aria-label="OpenAI Guide (Opens in a new Tab)">OpenAI Guide</a>
+                            <div class="task-tracking subtask-tracking">
+                                <label><input type="checkbox" class="task-status" data-task-type="started">Started</label>
+                                <label><input type="checkbox" class="task-status" data-task-type="completed">Completed</label>
+                            </div>
+                        </li>
                         <li><label><input type="checkbox" data-task-type="article"> <a href="https://cobusgreyling.medium.com/the-art-of-prompt-engineering-a-practical-guide-e8f932713526" target="_blank" aria-label="Art of Prompt Engineering (Opens in a new Tab)">Art of Prompt Engineering</a></label></li>
                         <li><label><input type="checkbox" data-task-type="article"> <a href="https://github.com/dair-ai/Prompt-Engineering-Guide" target="_blank" aria-label="DAIR.AI Guide (Opens in a new Tab)">DAIR.AI Guide</a></label></li>
                         <li><label><input type="checkbox" data-task-type="article"> <a href="https://docs.cohere.com/docs/prompt-engineering" target="_blank" aria-label="Cohere Docs (Opens in a new Tab)">Cohere Docs</a></label></li>
@@ -108,48 +125,65 @@
                     </ul>
                 
                             </details>
-                        </li>
-                    </ul>
+                        
                 </div>
             </section>
 
             <section><div class="module task-module" data-task-id="videos">
                     <h2>Task: Watch Videos</h2>
+                    <div class="task-tracking">
+                        <label><input type="checkbox" class="task-status" data-task-type="started">Started</label>
+                        <label><input type="checkbox" class="task-status" data-task-type="completed">Completed</label>
+                    </div>
                     <div class="task-content">
                         <div class="section-progress">
                             Section Progress: <span id="videos-percentage">0%</span>
                         </div>
                         <p>Learn through visual explanations and tutorials.</p>
-                        <ul>
-                            <li><a href="https://www.youtube.com/watch?v=dOxUroR57xA" target="_blank" aria-label="Prompt Engineering Tutorial – Master ChatGPT & LLMs (freeCodeCamp) (Opens in a new Tab)">Prompt Engineering Tutorial – Master ChatGPT & LLMs (freeCodeCamp)</a></li>
-                            <li><a href="https://www.youtube.com/watch?v=nokPc-gCMA8" target="_blank" aria-label="What Is Prompt Engineering? (IBM Technology) (Opens in a new Tab)">What Is Prompt Engineering? (IBM Technology)</a></li>
-                            <li><a href="https://www.youtube.com/watch?v=46kIuXI-7cs" target="_blank" aria-label="Prompt Engineering for ChatGPT (DataCamp) (Opens in a new Tab)">Prompt Engineering for ChatGPT (DataCamp)</a></li>
-                            <li><a href="https://www.youtube.com/watch?v=HeoVbl4ceK8" target="_blank" aria-label="OpenAI's Prompt Engineering Guide Explained (YouTube - Various Creators) (Opens in a new Tab)">OpenAI's Prompt Engineering Guide Explained (YouTube - Various Creators)</a></li>
-                            <li><a href="https://www.youtube.com/watch?v=b9m1zTLRd9c" target="_blank" aria-label="Advanced Prompt Engineering Techniques (YouTube - Various Creators) (Opens in a new Tab)">Advanced Prompt Engineering Techniques (YouTube - Various Creators)</a></li>
-                        </ul>
                     </div>
-                    
-                    <ul class="task-list">
-                        <li>
-                            <details>
-                                <summary>Videos</summary>
-                                <ul>
-                                    <li><label><input type="checkbox" class="task-started" data-task-type="started"> Started</label></li>
-                                    <li><label><input type="checkbox" class="task-completed" data-task-type="completed"> Completed</label></li>
-                        <li><label><input type="checkbox" data-task-type="video"> <a href="https://www.youtube.com/watch?v=dOxUroR57xA" target="_blank" aria-label="Prompt Engineering Tutorial (Opens in a new Tab)">Prompt Engineering Tutorial</a></label></li>
-                        <li><label><input type="checkbox" data-task-type="video"> <a href="https://www.youtube.com/watch?v=nokPc-gCMA8" target="_blank" aria-label="What Is Prompt Engineering? (Opens in a new Tab)">What Is Prompt Engineering?</a></label></li>
-                        <li><label><input type="checkbox" data-task-type="video"> <a href="https://www.youtube.com/watch?v=46kIuXI-7cs" target="_blank" aria-label="Prompt Engineering for ChatGPT (Opens in a new Tab)">Prompt Engineering for ChatGPT</a></label></li>
-                        <li><label><input type="checkbox" data-task-type="video"> <a href="https://www.youtube.com/watch?v=HeoVbl4ceK8" target="_blank" aria-label="OpenAI's Guide Explained (Opens in a new Tab)">OpenAI's Guide Explained</a></label></li>
-                        <li><label><input type="checkbox" data-task-type="video"> <a href="https://www.youtube.com/watch?v=b9m1zTLRd9c" target="_blank" aria-label="Advanced Techniques (Opens in a new Tab)">Advanced Techniques</a></label></li>
-                    </ul>
-                </div>
-                
-                            </details>
+                    <button class="add-time-btn" data-section="videos">Add Session Time to Videos</button>
+                    <p>Total Time for Videos: <span id="videos-total-time">00:00:00</span></p>
+
+                    <ul>
+                        <li><label><input type="checkbox" data-task-type="video"> <a href="https://www.youtube.com/watch?v=dOxUroR57xA" target="_blank" aria-label="Prompt Engineering Tutorial (Opens in a new Tab)">Prompt Engineering Tutorial</a>
+                            <div class="task-tracking subtask-tracking">
+                                <label><input type="checkbox" class="task-status" data-task-type="started">Started</label>
+                                <label><input type="checkbox" class="task-status" data-task-type="completed">Completed</label>
+                            </div>
                         </li>
+                        <li><label><input type="checkbox" data-task-type="video"> <a href="https://www.youtube.com/watch?v=nokPc-gCMA8" target="_blank" aria-label="What Is Prompt Engineering? (Opens in a new Tab)">What Is Prompt Engineering?</a>
+                            <div class="task-tracking subtask-tracking">
+                                <label><input type="checkbox" class="task-status" data-task-type="started">Started</label>
+                                <label><input type="checkbox" class="task-status" data-task-type="completed">Completed</label>
+                            </div>
+                        </li>
+                        <li><label><input type="checkbox" data-task-type="video"> <a href="https://www.youtube.com/watch?v=46kIuXI-7cs" target="_blank" aria-label="Prompt Engineering for ChatGPT (Opens in a new Tab)">Prompt Engineering for ChatGPT</a>
+                            <div class="task-tracking subtask-tracking">
+                                <label><input type="checkbox" class="task-status" data-task-type="started">Started</label>
+                                <label><input type="checkbox" class="task-status" data-task-type="completed">Completed</label>
+                            </div>
+                        </li>
+                        <li><label><input type="checkbox" data-task-type="video"> <a href="https://www.youtube.com/watch?v=HeoVbl4ceK8" target="_blank" aria-label="OpenAI's Guide Explained (Opens in a new Tab)">OpenAI's Guide Explained</a>
+                            <div class="task-tracking subtask-tracking">
+                                <label><input type="checkbox" class="task-status" data-task-type="started">Started</label>
+                                <label><input type="checkbox" class="task-status" data-task-type="completed">Completed</label>
+                            </div>
+                        </li>
+                        <li><label><input type="checkbox" data-task-type="video"> <a href="https://www.youtube.com/watch?v=b9m1zTLRd9c" target="_blank" aria-label="Advanced Techniques (Opens in a new Tab)">Advanced Techniques</a>
+                            <div class="task-tracking subtask-tracking">
+                                <label><input type="checkbox" class="task-status" data-task-type="started">Started</label>
+                                <label><input type="checkbox" class="task-status" data-task-type="completed">Completed</label>
+                            </div>
+                        </li>
+                    </ul>
             </section>
 
             <section><div class="module task-module" data-task-id="more-links">
                     <h2>More Links</h2>
+                    <div class="task-tracking">
+                        <label><input type="checkbox" class="task-status" data-task-type="started">Started</label>
+                        <label><input type="checkbox" class="task-status" data-task-type="completed">Completed</label>
+                    </div>
                     <div class="task-content">
                         <p>Additional resources to explore.</p>
                         <ul>
@@ -161,16 +195,11 @@
                     
                     <div class="section-progress">
                         Section Progress: <span id="more-links-percentage">0%</span>
+                        <button class="add-time-btn" data-section="more-links">Add Session Time to More Links</button>
+                        <p>Total Time for More Links: <span id="more-links-total-time">00:00:00</span></p>
                     </div>
                 </div>
             </section>
-                    
-                
-                            
-                        
-                    
-                
-
         </div> 
     </main>
     <script src="script.js"></script>

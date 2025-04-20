@@ -77,37 +77,40 @@ li {
     margin-bottom: 8px;
 }
 
+/* Total Progress Section */
+.total-progress-section {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    padding: 15px;
+    border-bottom: 1px solid #e0e0e0;
+    z-index: 100;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+
 /* Module Styling */
 .module {
     background-color: white;
     border: 1px solid #e0e0e0;
     border-radius: 6px;
     padding: 20px;
-    margin-bottom: 25px;
+    margin-bottom: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
+
 /* --- NEW Progress Bar Styles --- */
-.progress-module {
-    /* Sticky positioning */
-    position: sticky;
-    top: 20px; /* Adjust as needed */
-    z-index: 100; /* Ensure it stays on top */
-    background-color: #e9f5ff; /* Light blue background */
-    border-color: #bde0fe;
+.progress-module {\n    background-color: #e9f5ff; /* Light blue background */\n    border-color: #bde0fe;\n    margin-bottom: 20px; /* Add some space below */\n    padding: 15px;\n    border-radius: 8px;\n    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);\n}
+
+#progress-bar-container {\n    width: 100%;\n    height: 25px;\n    background-color: #e0e0e0;\n    border-radius: 12px;\n    overflow: hidden; /* Keep the fill inside */\n    margin-bottom: 10px;\n    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);\n}\n\n#progress-bar-fill {\n    height: 100%;\n    width: 0%; /* Initial width */\n    background-color: #5cb85c; /* Green for progress */\n    border-radius: 12px;\n    transition: width 0.5s ease-in-out; /* Smooth animation */\n    text-align: center; /* Center potential text inside */\n    color: white;\n    font-weight: bold;\n    line-height: 25px; /* Vertically center text if needed */\n}\n\n#progress-percentage {\n    text-align: center;\n    font-weight: bold;\n    color: #34495e;\n    margin-top: 5px;\n}\n\n/* --- Collapsible Section Styles --- */\n.collapsible-section {\n    margin-bottom: 20px; /* Space between sections */\n}\n\n.collapsible-section summary {\n    font-weight: bold;\n    cursor: pointer;\n    padding: 10px;\n    background-color: #f0f0f0; /* Light background */\n    border-radius: 5px;\n    margin-bottom: 10px;\n}\n\n.collapsible-section[open] summary {\n    border-bottom-left-radius: 0;\n    border-bottom-right-radius: 0;\n}\n
     /* Collapsible section styles */
     padding: 15px; /* Add some padding */
     border-radius: 8px; /* Rounded corners */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
-.progress-module summary {
-    font-weight: bold;
-    cursor: pointer;
-    padding: 10px;
-    background-color: #d0e8ff; /* Slightly darker blue */
-    border-radius: 5px;
-    margin-bottom: 10px;
+.section-time {\n    font-size: 0.9em;\n    color: #555;\n    margin-left: 10px;\n}\n\n.add-time-button {\n    background-color: #3498db;\n    color: white;\n    border: none;\n    padding: 8px 12px;\n    border-radius: 4px;\n    cursor: pointer;\n    font-size: 0.9em;\n    transition: background-color 0.2s ease;\n}\n\n.add-time-button:hover {\n    background-color: #2980b9;\n}\n\n/* List Item Checkboxes */\n.task-list li {\n    display: flex;\n    align-items: center;\n    margin-bottom: 5px;\n}\n\n.task-list label {\n    display: inline-flex;\n    align-items: center;\n    cursor: pointer;\n}\n\n.task-list input[type=\"checkbox\"] {\n    margin-right: 8px;\n    width: 16px;\n    height: 16px;\n    cursor: pointer;\n}\n\n/* Subtask Tracking Checkboxes */\n.subtask-tracking {\n    display: flex;\n    gap: 10px;\n    margin-top: 10px;\n}\n\n.subtask-tracking label {\n    display: flex;\n    align-items: center;\n    cursor: pointer;\n    font-size: 0.9em;\n    color: #555;\n}\n\n.subtask-tracking input[type=\"checkbox\"] {\n    margin-right: 5px;\n    width: 14px;\n    height: 14px;\n    cursor: pointer;\n}\n\n\n
 }
 
 #progress-bar-container {

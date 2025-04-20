@@ -2,7 +2,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Constants ---
     const NOTES_STORAGE_KEY = 'studyGuideNotes';
     const HABIT_STATE_STORAGE_KEY = 'studyHabitState';
-    const TASK_MODULES = document.querySelectorAll('.task-module'); // Get all task modules
+    const SECTION_TIME_STORAGE_KEY = 'sectionTimes';
+    const TASK_MODULES = document.querySelectorAll('.task-module');
+    const SESSION_TIME_KEY = 'sessionTime';
 
     // --- Timer Functionality ---
     const timerDisplay = document.getElementById('timer-display');
@@ -13,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let timerInterval = null;
     let seconds = 0;
     let isRunning = false;
+    let sessionSeconds = 0; // Separate counter for session time
     const overallProgress = document.getElementById('overall-progress');
 
     function formatTime(totalSeconds) {
@@ -37,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         startButton.disabled = true;
         pauseButton.disabled = false;
         timerInterval = setInterval(() => {
+            sessionSeconds++; // Increment session time
             seconds++;
             updateTimerDisplay();
         }, 1000);
@@ -53,15 +57,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function resetTimer() {
         pauseTimer();
+        sessionSeconds = 0; // Reset session time
         seconds = 0;
         updateTimerDisplay();
+        updateSessionTimeDisplay(); // Also update the session time display
         if (startButton) startButton.disabled = false;
         if (pauseButton) pauseButton.disabled = true;
+    }
+
+    // New: Update the displayed session time
+    function updateSessionTimeDisplay() {
+        const sessionTimeDisplay = document.getElementById('session-time');
+        if (sessionTimeDisplay) {
+            sessionTimeDisplay.textContent = formatTime(sessionSeconds);
+        }
     }
 
     // Add timer listeners only if the elements exist
     if (startButton && pauseButton && resetButton) {
         startButton.addEventListener('click', startTimer);
+        startButton.addEventListener('click', () => { // Also clear session time on start
+            sessionSeconds = 0;
+            updateSessionTimeDisplay();
+        });
         pauseButton.addEventListener('click', pauseTimer);
         resetButton.addEventListener('click', resetTimer);
         updateTimerDisplay(); // Initial display
@@ -80,102 +98,234 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Habit Tracking & Progress ---
-    const progressBarFill = document.getElementById('progress-bar-fill');
-    const progressPercentageText = document.getElementById('progress-percentage');
-
+    // --- Section Time Tracking ---
     function getHabitState() {
         const stateString = localStorage.getItem(HABIT_STATE_STORAGE_KEY);
         try {
             return stateString ? JSON.parse(stateString) : {};
         } catch (e) {
-            console.error("Error parsing habit state:", e);
-            return {}; // Return empty object on error
+            console.error('Error parsing habit state:', e);
+            return {};
         }
     }
 
     function saveHabitState(state) {
-         try {
-             localStorage.setItem(HABIT_STATE_STORAGE_KEY, JSON.stringify(state));
-         } catch (e) {
-             console.error("Error saving habit state:", e);
-         }
+        try {
+            localStorage.setItem(HABIT_STATE_STORAGE_KEY, JSON.stringify(state));
+        } catch (e) {
+            console.error('Error saving habit state:', e);
+        }
     }
 
-    function updateProgress() {
-        if (!progressBarFill || !progressPercentageText || TASK_MODULES.length === 0) return; // Ensure elements exist
+    function getSectionTimes() {
+        const timesString = localStorage.getItem(SECTION_TIME_STORAGE_KEY);
+        try {
+            return timesString ? JSON.parse(timesString) : {};
+        } catch (e) {
+            console.error('Error parsing section times:', e);
+            return {};
+        }
+    }
 
-        const state = getHabitState();
-        let completedCount = 0;
+    function saveSectionTimes(times) {
+        try {
+            localStorage.setItem(SECTION_TIME_STORAGE_KEY, JSON.stringify(times));
+        } catch (e) {
+            console.error('Error saving section times:', e);
+        }
+    }
+
+    function updateSectionTimeDisplay(sectionId) {
+        const sectionTimes = getSectionTimes();
+        const totalSeconds = sectionTimes[sectionId] || 0;
+        const display = document.getElementById(`${sectionId}-total-time`);
+        if (display) {
+            display.textContent = formatTime(totalSeconds);
+        }
+    }
+
+    function addTimeToSection(sectionId) {
+        const sectionTimes = getSectionTimes();
+        sectionTimes[sectionId] = (sectionTimes[sectionId] || 0) + sessionSeconds;
+        saveSectionTimes(sectionTimes);
+        updateSectionTimeDisplay(sectionId);
+    }
+
+    // --- Total Progress ---
+    const totalProgressBarFill = document.getElementById('total-progress-bar-fill');
+    const totalProgressPercentageText = document.getElementById('total-progress-percentage');
+
+    function calculateTotalProgress() {
+        let totalTasks = 0;
+        let completedTasks = 0;
+        const habitState = getHabitState();
+
         TASK_MODULES.forEach(module => {
-            const taskId = module.dataset.taskId;
-            if (state[taskId]?.completed) { // Check if task exists in state and is completed
-                completedCount++;
-            }
+            const taskCheckboxes = module.querySelectorAll('input[type="checkbox"][data-task-type="completed"]');
+            const subtaskCheckboxes = module.querySelectorAll('.subtask-tracking input[type="checkbox"][data-task-type="completed"]');
+            totalTasks += taskCheckboxes.length + subtaskCheckboxes.length;
+
+            taskCheckboxes.forEach(checkbox => {
+                const taskId = checkbox.closest('.task-module').dataset.taskId;
+                if (habitState[taskId]?.completed) {
+                    completedTasks++;
+                }
+            });
+
+            subtaskCheckboxes.forEach(checkbox => {
+                const taskId = checkbox.closest('li').dataset.taskId; // Assuming data-task-id on list items
+                const isCompleted = habitState[taskId]?.completed;
+                if (isCompleted) {
+                    completedTasks++;
+                }
+            });
+        });
+        return totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+    }
+
+    function updateTotalProgress() {
+        const totalProgress = calculateTotalProgress();
+        if (totalProgressBarFill && totalProgressPercentageText) {
+            totalProgressBarFill.style.width = `${totalProgress}%`;
+            totalProgressPercentageText.textContent = `Overall Progress: ${totalProgress}%`;
+        }
+    }
+
+    // --- Overall Progress ---
+    const overallProgressBarFill = document.getElementById('overall-progress-bar-fill');
+    const overallProgressPercentageText = document.getElementById('overall-progress-percentage');
+    const overallProgressSection = document.getElementById('overall-progress-section');
+
+    function updateOverallProgressDisplay() {
+        let totalItems = 0;
+        let completedItems = 0;
+
+        TASK_MODULES.forEach(module => {
+            const listItems = module.querySelectorAll('li');
+            totalItems += listItems.length;
+
+            listItems.forEach(item => {
+                const checkbox = item.querySelector('input[type="checkbox"]');
+                if (checkbox && checkbox.checked) {
+                    completedItems++;
+                }
+            });
         });
 
-        const totalTasks = TASK_MODULES.length;
-        const percentage = totalTasks > 0 ? Math.round((completedCount / totalTasks) * 100) : 0;
+        const overallPercentage = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
+        if (overallProgressBarFill && overallProgressPercentageText) {
+            overallProgressBarFill.style.width = `${overallPercentage}%`;
+            overallProgressPercentageText.textContent = `Overall Progress: ${overallPercentage}%`;
+        }
+    }
 
-        progressBarFill.style.width = `${percentage}%`;
-        // Optional: Add text inside the bar if you want
-        // progressBarFill.textContent = `${percentage}%`;
-        progressPercentageText.textContent = `Progress: ${percentage}%`;
+    // --- Initialize ---
+    function initializeSectionTimes() {
+        const sectionTimes = getSectionTimes();
+        document.querySelectorAll('.add-time-btn').forEach(button => {
+            const sectionId = button.dataset.section;
+            updateSectionTimeDisplay(sectionId);
+        });
     }
 
     function initializeHabitTracker() {
         const state = getHabitState();
 
         TASK_MODULES.forEach(module => {
+            const moduleStartedCheckbox = module.querySelector('.task-status[data-task-type="started"]');
+            const moduleCompletedCheckbox = module.querySelector('.task-status[data-task-type="completed"]');
             const taskId = module.dataset.taskId;
-            if (!taskId) return; // Skip if no task ID
 
-            const startedCheckbox = module.querySelector('.task-started');
-            const completedCheckbox = module.querySelector('.task-completed');
-
-            // Set initial checkbox state from localStorage
-            if (startedCheckbox) {
-                 startedCheckbox.checked = state[taskId]?.started || false;
+            // Initialize module checkboxes
+            if (moduleStartedCheckbox) {
+                moduleStartedCheckbox.checked = state[taskId]?.started || false;
             }
-            if (completedCheckbox) {
-                 completedCheckbox.checked = state[taskId]?.completed || false;
+            if (moduleCompletedCheckbox) {
+                moduleCompletedCheckbox.checked = state[taskId]?.completed || false;
             }
 
-            const checkboxes = module.querySelectorAll('.task-tracking input[type="checkbox"]');
-            checkboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', (event) => {
-                    const currentState = getHabitState(); // Get the latest state
-                    const type = event.target.dataset.taskType; // 'started' or 'completed'
+            // Initialize task list items within the module
+            module.querySelectorAll('li').forEach(listItem => {
+                const itemTaskId = `${taskId}-${listItem.textContent.trim().replace(/[^a-zA-Z0-9]/g, '_')}`; // Create unique ID
+                listItem.dataset.taskId = itemTaskId;
+                const startedCheckbox = listItem.querySelector('.task-status[data-task-type="started"]');
+                const completedCheckbox = listItem.querySelector('.task-status[data-task-type="completed"]');
 
-                    // Ensure the task entry exists in the state object
-                    if (!currentState[taskId]) {
-                        currentState[taskId] = { started: false, completed: false };
-                    }
-
-                    // Update the specific state (started or completed)
-                    currentState[taskId][type] = event.target.checked;
-
-                    // Optional: Add logic like auto-checking 'started' if 'completed' is checked
-                    if (type === 'completed' && event.target.checked && startedCheckbox) {
-                         currentState[taskId].started = true; // Auto-set started
-                         startedCheckbox.checked = true; // Update UI too
-                    }
-
-                    // Optional: Uncheck 'completed' if 'started' is unchecked
-                    if (type === 'started' && !event.target.checked && completedCheckbox) {
-                         currentState[taskId].completed = false; // Auto-unset completed
-                         completedCheckbox.checked = false; // Update UI too
-                    }
-
-
-                    saveHabitState(currentState); // Save the updated state object
-                    updateProgress(); // Recalculate progress
-                });
+                if (startedCheckbox) {
+                    startedCheckbox.checked = state[itemTaskId]?.started || false;
+                }
+                if (completedCheckbox) {
+                    completedCheckbox.checked = state[itemTaskId]?.completed || false;
+                }
             });
-            updateSectionProgress(module); // Initial update for each section
         });
+    }
 
-        updateProgress(); // Initial progress calculation
+    // Function to handle checkbox changes
+    function handleCheckboxChange(event) {
+        const checkbox = event.target;
+        const state = getHabitState();
+        const isSubtask = checkbox.closest('.subtask-tracking');
+        let taskId;
+
+        if (isSubtask) {
+            taskId = checkbox.closest('li').dataset.taskId;
+        } else {
+            taskId = checkbox.closest('.task-module').dataset.taskId;
+        }
+
+        if (!taskId) return;
+
+        const type = checkbox.dataset.taskType;
+
+        if (!state[taskId]) {
+            state[taskId] = {};
+        }
+
+        state[taskId][type] = checkbox.checked;
+
+        // Update related checkboxes if needed (e.g., auto-check "started" when "completed")
+        if (type === 'completed' && checkbox.checked) {
+            const startedCheckbox = checkbox.closest(isSubtask ? 'li' : '.task-module').querySelector('.task-status[data-task-type="started"]');
+            if (startedCheckbox) {
+                state[taskId].started = true;
+                startedCheckbox.checked = true;
+            }
+        }
+
+        saveHabitState(state);
+        updateTotalProgress();
+        updateOverallProgressDisplay();
+    }
+
+    // --- Collapsible Section ---
+    if (overallProgressSection) {
+        const collapsibleContent = overallProgressSection.querySelector('.collapsible-content');
+        overallProgressSection.addEventListener('click', () => {
+            collapsibleContent.classList.toggle('collapsed');
+        });
+    }
+
+    // Attach event listeners for adding time to sections
+    document.querySelectorAll('.add-time-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            addTimeToSection(button.dataset.section);
+        });
+    });
+
+    // Attach event listeners to checkboxes
+    const allCheckboxes = document.querySelectorAll('input[type="checkbox"]');
+    allCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', handleCheckboxChange);
+    });
+
+    // --- Initialization ---
+    initializeSectionTimes();
+    initializeHabitTracker();
+    updateTotalProgress();
+    updateOverallProgressDisplay();
+    updateSessionTimeDisplay(); // Initial session time display
+}
     }
 
     function updateSectionProgress(module) {
