@@ -1,0 +1,252 @@
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f7f9;
+    color: #333;
+}
+
+.container {
+    max-width: 900px;
+    margin: 20px auto;
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 10px;
+}
+
+h2 {
+    color: #34495e;
+    margin-top: 0;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+}
+
+h3 { /* Less prominent now */
+    color: #16a085;
+    margin-top: 15px;
+    margin-bottom: 8px;
+    font-size: 1.1em;
+}
+
+a {
+    color: #2980b9;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: #1abc9c;
+    text-decoration: underline;
+}
+
+ul {
+    list-style: disc;
+    padding-left: 20px;
+    margin-top: 5px; /* Added */
+}
+
+li {
+    margin-bottom: 8px;
+}
+
+/* Module Styling */
+.module {
+    background-color: #fdfdfd;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* --- NEW Progress Bar Styles --- */
+.progress-module {
+    background-color: #e9f5ff; /* Light blue background */
+    border-color: #bde0fe;
+}
+
+#progress-bar-container {
+    width: 100%;
+    height: 25px;
+    background-color: #e0e0e0;
+    border-radius: 12px;
+    overflow: hidden; /* Keep the fill inside */
+    margin-bottom: 10px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+#progress-bar-fill {
+    height: 100%;
+    width: 0%; /* Initial width */
+    background-color: #5cb85c; /* Green for progress */
+    border-radius: 12px;
+    transition: width 0.5s ease-in-out; /* Smooth animation */
+    text-align: center; /* Center potential text inside */
+    color: white;
+    font-weight: bold;
+    line-height: 25px; /* Vertically center text if needed */
+}
+
+#progress-percentage {
+    text-align: center;
+    font-weight: bold;
+    color: #34495e;
+    margin-top: 5px;
+}
+/* --- END Progress Bar Styles --- */
+
+/* Task Module Specific Styles */
+.task-module {
+    /* Optional: Add specific styles if needed */
+}
+
+.task-content {
+    margin-bottom: 15px; /* Space between content and tracking */
+}
+
+.task-content p {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.task-tracking {
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-around; /* Evenly space checkboxes */
+    align-items: center;
+}
+
+.task-tracking label {
+    cursor: pointer;
+    display: inline-flex; /* Align checkbox and text */
+    align-items: center;
+    gap: 5px; /* Space between checkbox and text */
+    font-size: 0.95em;
+    color: #444;
+}
+
+.task-tracking input[type="checkbox"] {
+    cursor: pointer;
+    width: 16px; /* Slightly larger checkbox */
+    height: 16px;
+}
+
+
+/* Timer Module (Keep previous styles) */
+.timer-module #timer-display { /* Target timer display specifically if needed */
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+    background-color: #ecf0f1;
+    padding: 10px 0;
+    border-radius: 4px;
+    text-align: center; /* Ensure centered */
+}
+
+.timer-module .timer-controls { /* Target timer controls specifically */
+    text-align: center; /* Ensure centered */
+}
+
+.timer-controls button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.2s ease;
+}
+
+.timer-controls button:hover {
+    background-color: #2980b9;
+}
+
+.timer-controls button:disabled {
+    background-color: #bdc3c7;
+    cursor: not-allowed;
+}
+
+#pause-timer {
+    background-color: #f39c12;
+}
+#pause-timer:hover {
+    background-color: #e67e22;
+}
+
+#reset-timer {
+    background-color: #e74c3c;
+}
+#reset-timer:hover {
+    background-color: #c0392b;
+}
+
+
+/* Notes Module (Keep previous styles) */
+#notes-area {
+    width: 100%;
+    min-height: 150px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+    line-height: 1.5;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+/* Responsive Adjustments (Keep previous or enhance) */
+@media (max-width: 600px) {
+    .container {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 1.6em;
+    }
+
+    h2 {
+        font-size: 1.3em;
+    }
+
+    #timer-display {
+        font-size: 2em;
+    }
+
+    .timer-controls button {
+        padding: 8px 15px;
+        font-size: 0.9em;
+    }
+
+    .task-tracking {
+        flex-direction: column; /* Stack checkboxes vertically */
+        align-items: flex-start; /* Align to left */
+        gap: 10px; /* Add space between stacked items */
+    }
+
+    #progress-bar-container {
+        height: 20px;
+    }
+     #progress-bar-fill {
+        line-height: 20px;
+    }
+}
+
